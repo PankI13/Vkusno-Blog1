@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Кулинарный блог | Рецепты народов мира</title>
+  <style>
+    /* ——— CSS-ПЕРЕМЕННЫЕ ——— */
+    :root {
+      --bg: #fefaf5;
+      --text: #2c241a;
+      --header-bg: rgba(255,248,240,0.95);
+      --card-bg: #ffffff;
+      --border: #ffe2cf;
+      --accent: #e67e22;
+      --accent-hover: #cf711f;
+      --meta-bg: #fff0e4;
+      --footer-text: #8b694c;
+      --modal-bg: #ffffff;
+      --input-bg: #fefaf5;
+      --shadow: rgba(0,0,0,0.1);
+      --font-size: 16px;
+    }
+    body.dark {
+      --bg: #1e1e1e;
+      --text: #f0e6d8;
+      --header-bg: #2a2a2a;
+      --card-bg: #2d2d2d;
+      --border: #4a3f3a;
+      --meta-bg: #3d332e;
+      --footer-text: #a6907a;
+      --modal-bg: #2d2d2d;
+      --input-bg: #3a3a3a;
+      --shadow: rgba(0,0,0,0.6);
+    }
+    body.small-font { --font-size: 14px; }
+    body.large-font { --font-size: 20px; }
+    body { font-size: var(--font-size); }
+
+    /* ——— ОБЩИЕ СТИЛИ ——— */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      transition: background 0.3s, color 0.3s;
+    }
+    h1, h2, h3, .logo, .nav-links a, .hero-title, .btn {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    h2 {
+      font-size: 2.2rem;
+      letter-spacing: -0.01em;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: var(--text);
+      position: relative;
+      width: 100%;
+    }
+    h2:after {
+      content: '';
+      display: block;
+      width: 70px;
+      height: 3px;
+      background: var(--accent);
+      margin: 0.6rem auto 0;
+      border-radius: 4px;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+    /* ——— HEADER ——— */
+    header {
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.8rem 0;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+    .logo { font-size: 1.8rem; font-weight: 700; color: #c45c1b; text-decoration: none; }
+    .logo span { color: #f39c12; }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .theme-toggle, .font-toggle {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text);
+      transition: 0.2s;
+      padding: 0.2rem 0.4rem;
+      border-radius: 40px;
+      background: var(--card-bg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    }
+    .theme-toggle:hover, .font-toggle:hover { transform: scale(1.1); }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+      align-items: center;
+    }
+    .nav-links a {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--text);
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--accent); }
+    .menu-toggle {
+      display: none;
+      font-size: 1.8rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    /* ——— БАЗОВЫЕ КНОПКИ ——— */
+    .btn {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 0.9rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 12px rgba(230,126,34,0.2);
+      font-family: 'Inter', sans-serif;
+    }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--accent);
+      color: var(--accent);
+      box-shadow: none;
+    }
+    .btn-outline:hover { background: var(--accent); color: white; }
+    .btn:hover { background: var(--accent-hover); transform: translateY(-2px); }
+
+    /* ——— СТРАНИЦЫ ——— */
+    .page { display: none; animation: fadeIn 0.3s ease; }
+    .page.active-page { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* ——— ГЕРОЙ ——— */
+    .hero {
+      background: linear-gradient(120deg, #fff3e9, #ffe6d5);
+      padding: 4rem 0;
+      border-radius: 0 0 48px 48px;
+      margin-bottom: 3rem;
+      transition: background 0.3s;
+    }
+    body.dark .hero { background: linear-gradient(120deg, #2d241e, #3d2f28); }
+    .hero-grid {
+      display: flex;
+      align-items: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+    .hero-text { flex: 1; }
+    .hero-title { font-size: 3.2rem; font-weight: 700; line-height: 1.2; color: var(--text); margin-bottom: 1.2rem; }
+    .hero-title span { color: var(--accent); }
+    .hero-desc { font-size: 1.1rem; color: var(--text); margin-bottom: 2rem; max-width: 500px; opacity: 0.8; }
+    .hero-img { flex: 1; text-align: center; }
+    .hero-img img { max-width: 100%; border-radius: 40px; box-shadow: 0 20px 30px -10px var(--shadow); }
+
+    /* ——— СЕТКА РЕЦЕПТОВ ——— */
+    .recipes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      margin: 2rem 0;
+    }
+    .recipe-card {
+      background: var(--card-bg);
+      border-radius: 28px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.03);
+      border: 1px solid var(--border);
+      opacity: 0;
+      transform: translateY(30px);
+      animation: cardAppear 0.5s forwards;
+    }
+    .recipe-card:nth-child(1) { animation-delay: 0.05s; }
+    .recipe-card:nth-child(2) { animation-delay: 0.10s; }
+    .recipe-card:nth-child(3) { animation-delay: 0.15s; }
+    .recipe-card:nth-child(4) { animation-delay: 0.20s; }
+    .recipe-card:nth-child(5) { animation-delay: 0.25s; }
+    .recipe-card:nth-child(6) { animation-delay: 0.30s; }
+    .recipe-card:nth-child(7) { animation-delay: 0.35s; }
+    .recipe-card:nth-child(8) { animation-delay: 0.40s; }
+    .recipe-card:nth-child(9) { animation-delay: 0.45s; }
+    .recipe-card:nth-child(10) { animation-delay: 0.50s; }
+    .recipe-card:nth-child(11) { animation-delay: 0.55s; }
+    .recipe-card:nth-child(12) { animation-delay: 0.60s; }
+    .recipe-card:nth-child(13) { animation-delay: 0.65s; }
+    .recipe-card:nth-child(14) { animation-delay: 0.70s; }
+    .recipe-card:nth-child(15) { animation-delay: 0.75s; }
+    .recipe-card:nth-child(16) { animation-delay: 0.80s; }
+    .recipe-card:nth-child(17) { animation-delay: 0.85s; }
+    .recipe-card:nth-child(18) { animation-delay: 0.90s; }
+    .recipe-card:nth-child(19) { animation-delay: 0.95s; }
+    .recipe-card:nth-child(20) { animation-delay: 1.00s; }
+    @keyframes cardAppear {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .recipe-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 30px -12px var(--shadow);
+      border-color: var(--accent);
+    }
+    .recipe-img { width: 100%; height: 220px; object-fit: cover; }
+    .recipe-info { padding: 1.5rem 1.2rem 1.8rem; }
+    .recipe-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.6rem; color: var(--text); }
+    .recipe-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: #b87333;
+      margin-bottom: 0.8rem;
+      font-weight: 500;
+    }
+    .recipe-meta span { background: var(--meta-bg); padding: 0.2rem 0.6rem; border-radius: 40px; }
+    .recipe-desc { color: var(--text); margin-bottom: 1.2rem; font-size: 0.95rem; opacity: 0.8; }
+    .recipe-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 1rem;
+    }
+    .like-btn {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      color: var(--text);
+      transition: 0.2s;
+      padding: 0.2rem 0.8rem;
+      border-radius: 40px;
+      background: var(--meta-bg);
+    }
+    .like-btn:hover { transform: scale(1.1); }
+    .like-btn.liked { color: #e74c3c; }
+
+    /* ——— ФИЛЬТРЫ ——— */
+    .filter-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin: 1.5rem 0 1rem;
+    }
+    .filter-btn {
+      background: var(--card-bg);
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      padding: 0.5rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+    }
+    .filter-btn.active-filter, .filter-btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    /* ——— ПОИСК И СОРТИРОВКА ——— */
+    .search-sort-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      justify-content: center;
+      margin: 1rem 0 2rem;
+    }
+    .search-sort-bar input, .search-sort-bar select {
+      padding: 0.7rem 1.2rem;
+      border-radius: 40px;
+      border: 1px solid var(--border);
+      font-family: 'Inter', sans-serif;
+      background: var(--input-bg);
+      color: var(--text);
+      font-size: 1rem;
+      outline: none;
+      transition: 0.2s;
+    }
+    .search-sort-bar input:focus, .search-sort-bar select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(230,126,34,0.2);
+    }
+    .search-sort-bar input { flex: 1; min-width: 200px; }
+    .search-sort-bar select { min-width: 150px; }
+
+    /* ——— СТРАНИЦА О НАС ——— */
+    .about-section {
+      background: var(--card-bg);
+      border-radius: 48px;
+      padding: 3rem 2rem;
+      margin: 2rem 0;
+      border: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .about-flex {
+      display: flex;
+      gap: 3rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .about-img { flex: 1; text-align: center; }
+    .about-img img { width: 100%; max-width: 320px; border-radius: 50%; box-shadow: 0 25px 35px -15px var(--shadow); border: 5px solid var(--bg); }
+    .about-text { flex: 2; }
+    .about-text h3 { font-size: 2rem; font-family: 'Playfair Display', serif; margin-bottom: 1rem; }
+
+    /* ——— КОНТАКТЫ ——— */
+    .contacts-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 3rem;
+      margin: 2rem 0;
+    }
+    .contact-info, .contact-form {
+      flex: 1;
+      background: var(--card-bg);
+      border-radius: 36px;
+      padding: 2rem;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+    .contact-info h3, .contact-form h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+    .contact-details p { margin: 1rem 0; display: flex; align-items: center; gap: 0.8rem; }
+    .contact-form input, .contact-form textarea {
+      width: 100%;
+      padding: 0.9rem;
+      margin: 0.7rem 0;
+      border-radius: 28px;
+      border: 1px solid var(--border);
+      font-family: inherit;
+      background: var(--input-bg);
+      color: var(--text);
+    }
+    .contact-form button { margin-top: 0.5rem; width: 100%; }
+
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--footer-text);
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+
+    /* ——— МОДАЛЬНОЕ ОКНО ——— */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      animation: modalFade 0.3s ease;
+    }
+    @keyframes modalFade {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-content {
+      background: var(--modal-bg);
+      width: 90%;
+      max-width: 600px;
+      border-radius: 36px;
+      padding: 1.8rem;
+      max-height: 85vh;
+      overflow-y: auto;
+      position: relative;
+      transition: background 0.3s;
+    }
+    .modal-close {
+      position: absolute;
+      right: 1.5rem;
+      top: 1.3rem;
+      font-size: 1.8rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      font-weight: bold;
+      color: var(--text);
+      opacity: 0.6;
+    }
+    .modal-close:hover { opacity: 1; }
+    .modal-like-area {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 1rem;
+    }
+
+    /* ——— АДАПТИВ ——— */
+    @media (max-width: 860px) {
+      .menu-toggle { display: block; }
+      .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 0 0.5rem;
+      }
+      .nav-links.show { display: flex; }
+      .hero-title { font-size: 2.4rem; }
+      .hero-grid { flex-direction: column-reverse; text-align: center; }
+      .hero-desc { margin-left: auto; margin-right: auto; }
+      h2 { font-size: 1.8rem; }
+      .filter-buttons { gap: 0.5rem; }
+      .filter-btn { padding: 0.3rem 0.8rem; font-size: 0.8rem; }
+      .search-sort-bar input { min-width: 120px; }
+      .nav-right { gap: 0.5rem; }
+    }
+    @media (max-width: 560px) {
+      .container { padding: 0 18px; }
+      .recipe-title { font-size: 1.3rem; }
+      .search-sort-bar { flex-direction: column; }
+      .search-sort-bar input, .search-sort-bar select { width: 100%; }
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<header>
+  <div class="container">
+    <div class="navbar">
+      <a href="#" class="logo">Вкусный <span>Блог</span></a>
+      <div class="nav-right">
+        <button class="theme-toggle" id="themeToggle" aria-label="Переключить тему">🌙</button>
+        <button class="font-toggle" id="fontToggle" aria-label="Размер шрифта">Aa</button>
+        <button class="menu-toggle" id="menuToggle">☰</button>
+      </div>
+      <ul class="nav-links" id="navLinks">
+        <li><a data-page="home">Главная</a></li>
+        <li><a data-page="recipes">Рецепты</a></li>
+        <li><a data-page="about">О нас</a></li>
+        <li><a data-page="contacts">Контакты</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Главная -->
+  <div id="homePage" class="page active-page">
+    <div class="hero">
+      <div class="container hero-grid">
+        <div class="hero-text">
+          <h1 class="hero-title">Путешествие <span>вкусов</span></h1>
+          <p class="hero-desc">Рецепты со всего мира: от итальянской пасты до русских пельменей. Готовьте с нами!</p>
+          <a class="btn" data-page="recipes">Смотреть рецепты</a>
+        </div>
+        <div class="hero-img">
+          <img src="https://images.unsplash.com/photo-1551183053-bf91a1d81141?w=600&auto=format" alt="Блюда мира">
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <h2>Популярные рецепты</h2>
+      <div class="recipes-grid" id="homeRecipesGrid"></div>
+      <div style="text-align: center; margin: 2rem 0;">
+        <button class="btn btn-outline" data-page="recipes">Все рецепты</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Страница Рецепты -->
+  <div id="recipesPage" class="page">
+    <div class="container" style="padding-top: 2rem;">
+      <h2>Рецепты народов мира</h2>
+      <div style="text-align: center; margin-bottom: 1rem;">
+        <button class="btn" id="randomRecipeBtn">🎲 Мне повезёт!</button>
+      </div>
+      <div class="filter-buttons" id="filterButtons">
+        <button class="filter-btn active-filter" data-category="all">Все</button>
+        <button class="filter-btn" data-category="italian">Италия</button>
+        <button class="filter-btn" data-category="russian">Россия</button>
+        <button class="filter-btn" data-category="asian">Азия</button>
+        <button class="filter-btn" data-category="european">Европа</button>
+        <button class="filter-btn" data-category="mexican">Мексика</button>
+        <button class="filter-btn" data-category="middle_east">Восток</button>
+      </div>
+      <div class="filter-buttons" id="extraFilters">
+        <span style="font-weight:600; margin-right:0.5rem;">Сложность:</span>
+        <button class="filter-btn extra-filter active-filter" data-type="difficulty" data-value="all">Все</button>
+        <button class="filter-btn extra-filter" data-type="difficulty" data-value="Легко">Легко</button>
+        <button class="filter-btn extra-filter" data-type="difficulty" data-value="Средне">Средне</button>
+        <button class="filter-btn extra-filter" data-type="difficulty" data-value="Сложно">Сложно</button>
+        <span style="font-weight:600; margin-left:1rem; margin-right:0.5rem;">Время:</span>
+        <button class="filter-btn extra-filter active-filter" data-type="time" data-value="all">Все</button>
+        <button class="filter-btn extra-filter" data-type="time" data-value="fast">до 30 мин</button>
+        <button class="filter-btn extra-filter" data-type="time" data-value="medium">30–60 мин</button>
+        <button class="filter-btn extra-filter" data-type="time" data-value="long">более 60 мин</button>
+      </div>
+      <div class="search-sort-bar">
+        <input type="text" id="searchInput" placeholder="Поиск по названию или ингредиентам...">
+        <select id="sortSelect">
+          <option value="title_asc">По названию (А–Я)</option>
+          <option value="time_asc">По времени (сначала быстрые)</option>
+          <option value="difficulty_asc">По сложности (сначала лёгкие)</option>
+        </select>
+      </div>
+      <div class="recipes-grid" id="allRecipesGrid"></div>
+    </div>
+  </div>
+
+  <!-- Страница О нас -->
+  <div id="aboutPage" class="page">
+    <div class="container">
+      <h2>О нас</h2>
+
+      <!-- Блок Панкратов Иван -->
+      <div class="about-section">
+        <div class="about-flex">
+          <div class="about-img">
+            <img src="povar.jpg" alt="Панкратов Иван">
+          </div>
+          <div class="about-text">
+            <h3>Панкратов Иван Алексеевич</h3>
+            <p>Я, <strong>Панкратов Иван Алексеевич</strong>, студент 4 курса группы СДИ-122 факультета Среднего профессионального образования Мордовского Государственного Педагогического Университета имени М. Е. Евсевьева, и это мой кулинарный блог и по совместительству моя выпускная квалификационная работа.</p>
+            <p>Здесь собраны рецепты разных стран, которыми с удовольствием делюсь с вами. Проект создан в рамках итоговой аттестации и отражает мои знания в области веб-разработки, дизайна и кулинарии.</p>
+            <button class="btn" data-page="contacts">Написать мне</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Блок Дикова Марина Михайловна -->
+      <div class="about-section">
+        <div class="about-flex">
+          <div class="about-img">
+            <!-- Заглушка -->
+            <img src="Дикова.jpg" alt="Дикова Марина Михайловна">
+          </div>
+          <div class="about-text">
+            <h3>Дикова Марина Михайловна</h3>
+            <p><strong>Дикова Марина Михайловна</strong> — преподаватель факультета Среднего профессионального образования Мордовского Государственного Педагогического Университета имени М. Е. Евсевьева.</p>
+            <p>Также она является научным руководителем Панкратова Ивана. Её вклад в оформление и атмосферу блога неоценим.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Контакты -->
+  <div id="contactsPage" class="page">
+    <div class="container">
+      <h2>Свяжитесь со мной</h2>
+      <div class="contacts-wrapper">
+        <div class="contact-info">
+          <h3>Контактная информация</h3>
+          <div class="contact-details">
+            <p> Саранск, Россия</p>
+            <p> ivan.pankratov@student.mordgpu.ru</p>
+            <p> +7 (900) 123-45-67</p>
+            <p> Telegram: @ivan_cook</p>
+          </div>
+        </div>
+        <div class="contact-form">
+          <h3>Напишите мне</h3>
+          <form id="contactForm">
+            <input type="text" placeholder="Ваше имя" required>
+            <input type="email" placeholder="Email" required>
+            <textarea rows="4" placeholder="Ваше сообщение..." required></textarea>
+            <button type="submit" class="btn">Отправить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 Кулинарный блог Панкратова И.А. и Диковой М.М. | Выпускная квалификационная работа</p>
+</footer>
+
+<!-- Модальное окно -->
+<div id="recipeModal" class="modal">
+  <div class="modal-content">
+    <button class="modal-close" id="closeModalBtn">&times;</button>
+    <h3 id="modalTitle">Название рецепта</h3>
+    <div id="modalBody"></div>
+    <div class="modal-like-area">
+      <button class="like-btn" id="modalLikeBtn" data-id="">❤️ <span id="modalLikeCount">0</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ----- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ -----
+  function normalizeTime(timeStr) {
+    if (!timeStr) return 0;
+    const str = timeStr.toLowerCase().trim();
+    const match = str.match(/(\d+(\.\d+)?)/);
+    if (!match) return 0;
+    const num = parseFloat(match[1]);
+    if (str.includes('день') || str.includes('дн')) return num * 1440;
+    if (str.includes('час') || str.includes('ч')) return num * 60;
+    return num;
+  }
+
+  // ----- МАССИВ РЕЦЕПТОВ (44) -----
+  const recipesData = [
+    // Италия
+    { id: 1, title: "Паста Карбонара", category: "italian", img: "Паста Карбонара.jpg", time: "20 мин", difficulty: "Средне", shortDesc: "Кремовая классика с гуанчиале и пармезаном.", ingredients: ["200 г спагетти","100 г гуанчиале","2 яйца","50 г пармезана","перец, соль"], steps: ["Отварите спагетти.","Обжарьте гуанчиале.","Смешайте яйца с сыром.","Соедините пасту с беконом, добавьте яичную смесь."] },
+    { id: 2, title: "Пицца Маргарита", category: "italian", img: "Пицца Маргарита.jpeg", time: "45 мин", difficulty: "Средне", shortDesc: "Томатный соус, моцарелла, базилик.", ingredients: ["тесто для пиццы","томатный соус","моцарелла 200г","базилик","оливковое масло"], steps: ["Раскатайте тесто.","Смажьте соусом.","Выложице моцареллу.","Выпекайте 15 мин при 220°C.","Украсьте базиликом."] },
+    { id: 3, title: "Ризотто с грибами", category: "italian", img: "Ризотто с грибами.jpg", time: "35 мин", difficulty: "Средне", shortDesc: "Нежное ризотто с ароматными грибами.", ingredients: ["рис арборио 300г","шампиньоны 200г","лук","бульон","пармезан","белое вино"], steps: ["Обжарьте лук и грибы.","Добавьте рис, влейте вино.","Постепенно добавляйте бульон, помешивая.","В конце добавьте пармезан."] },
+    { id: 15, title: "Лазанья болоньезе", category: "italian", img: "Лазанья болоньезе.jpg", time: "1 час", difficulty: "Сложно", shortDesc: "Слоёная паста с мясным соусом и бешамелью.", ingredients: ["листы лазаньи","фарш говяжий 500г","томатный соус","лук","морковь","мука","молоко","сыр пармезан"], steps: ["Обжарьте фарш с луком и морковью.","Добавьте томатный соус, тушите 30 мин.","Приготовьте бешамель.","Выложите слои лазаньи, запеките 40 мин."] },
+    { id: 16, title: "Тирамису", category: "italian", img: "Тирамису.jpg", time: "30 мин + охлаждение", difficulty: "Средне", shortDesc: "Знаменитый итальянский десерт с маскарпоне и кофе.", ingredients: ["яйца 3 шт","сахар 100г","маскарпоне 500г","печенье савоярди","кофе эспрессо","какао"], steps: ["Взбейте желтки с сахаром, добавьте маскарпоне.","Взбейте белки, аккуратно соедините.","Обмакните печенье в кофе, выложите слоями с кремом.","Уберите в холодильник на 4 часа.","Посыпьте какао."] },
+    { id: 17, title: "Оссобуко", category: "italian", img: "Оссобуко.jpg", time: "2 часа", difficulty: "Сложно", shortDesc: "Тушёная телячья голяшка с овощами.", ingredients: ["телячья голяшка 4 шт","лук","морковь","сельдерей","белое вино","бульон","гремолата"], steps: ["Обжарьте мясо до румяной корочки.","Добавьте овощи, вино и бульон.","Тушите 1.5 часа до мягкости.","Подавайте с гремолатой (цедра лимона, чеснок, петрушка)."] },
+    { id: 18, title: "Брускетта с томатами", category: "italian", img: "Брускетта с томатами.jpg", time: "15 мин", difficulty: "Легко", shortDesc: "Хрустящий хлеб с сочными помидорами и базиликом.", ingredients: ["багет","помидоры черри","чеснок","базилик","оливковое масло"], steps: ["Подрумяньте ломтики багета.","Натрите чесноком.","Смешайте нарезанные помидоры с маслом и базиликом.","Выложите на хлеб."] },
+    // Россия
+    { id: 4, title: "Щи из свежей капусты", category: "russian", img: "Щи из свежий капусты.jpeg", time: "1 час", difficulty: "Средне", shortDesc: "Традиционный русский суп.", ingredients: ["капуста 400г","картофель","морковь","лук","томатная паста","говядина"], steps: ["Сварите бульон.","Добавьте капусту и картофель.","Обжарьте лук с морковью и томатом.","Соедините, варите до готовности."] },
+    { id: 5, title: "Пельмени домашние", category: "russian", img: "Пельмени домашние.jpg", time: "1.5 часа", difficulty: "Сложно", shortDesc: "Сочные пельмени с фаршем.", ingredients: ["мука 500г","яйцо","вода","свинина 300г","говядина 200г","лук"], steps: ["Замесите тесто.","Приготовьте фарш с луком.","Раскатайте тесто, вырежьте кружки, слепите пельмени.","Варите в подсоленной воде 5-7 мин."] },
+    { id: 6, title: "Блины на молоке", category: "russian", img: "Блины на молоке.jpeg", time: "30 мин", difficulty: "Легко", shortDesc: "Тонкие, кружевные блины.", ingredients: ["молоко 500мл","яйца 2шт","мука 200г","сахар","соль","масло"], steps: ["Взбейте яйца с сахаром и солью.","Добавьте молоко и муку.","Жарьте на сковороде."] },
+    { id: 19, title: "Оливье", category: "russian", img: "Оливье.jpeg", time: "40 мин", difficulty: "Средне", shortDesc: "Классический новогодний салат.", ingredients: ["картофель","морковь","яйца","колбаса","огурцы солёные","горошек","майонез"], steps: ["Отварите овощи и яйца.","Нарежьте кубиками.","Смешайте с горошком и майонезом."] },
+    { id: 20, title: "Борщ", category: "russian", img: "Борщ.jpg", time: "1.5 часа", difficulty: "Средне", shortDesc: "Наваристый украинский борщ со свеклой.", ingredients: ["свекла","капуста","картофель","морковь","лук","томатная паста","говядина"], steps: ["Сварите бульон.","Обжарьте свёклу с морковью и луком.","Добавьте капусту и картофель в бульон.","Соедините с зажаркой, варите до готовности."] },
+    { id: 21, title: "Гречка с грибами", category: "russian", img: "Гречка с грибами.jpeg", time: "40 мин", difficulty: "Легко", shortDesc: "Сытная гречка с лесными грибами.", ingredients: ["гречка 200г","грибы 300г","лук","сливочное масло"], steps: ["Отварите гречку.","Обжарьте грибы с луком на масле.","Смешайте с гречкой."] },
+    // Азия
+    { id: 7, title: "Роллы Филадельфия", category: "asian", img: "Роллы Филадельфия.jpg", time: "50 мин", difficulty: "Сложно", shortDesc: "Сливочный сыр, лосось, огурец.", ingredients: ["нори","рис для суши","лосось","сливочный сыр","огурец","авокадо"], steps: ["Сварите рис, заправьте уксусом.","Выложите рис на нори, переверните.","Выложите начинку, сверните.","Нарежьте роллы."] },
+    { id: 8, title: "Курица Карри", category: "asian", img: "Курица Карри.jpg", time: "40 мин", difficulty: "Средне", shortDesc: "Ароматное карри с кокосовым молоком.", ingredients: ["куриное филе","лук","чеснок","имбирь","паста карри","кокосовое молоко"], steps: ["Обжарьте лук, чеснок, имбирь.","Добавьте курицу и пасту карри.","Влейте кокосовое молоко, тушите 15 мин."] },
+    { id: 9, title: "Лапша Wok с овощами", category: "asian", img: "Лапша Wok с овощами.jpg", time: "20 мин", difficulty: "Легко", shortDesc: "Быстрая лапша с соевым соусом.", ingredients: ["лапша удон","перец","морковь","цуккини","соевый соус","кунжут"], steps: ["Отварите лапшу.","Обжарьте овощи в воке.","Добавьте лапшу и соус, прогрейте."] },
+    { id: 22, title: "Том Ям", category: "asian", img: "Том Ям.jpg", time: "40 мин", difficulty: "Средне", shortDesc: "Острый тайский суп с креветками.", ingredients: ["креветки 400г","грибы","лимонграсс","кафир-лайм","чили","рыбный соус","кокосовое молоко"], steps: ["Сварите бульон с лимонграссом и лаймом.","Добавьте грибы, креветки, чили.","Влейте кокосовое молоко, доведите до кипения."] },
+    { id: 23, title: "Удон с говядиной", category: "asian", img: "Удон с говядиной.jpeg", time: "30 мин", difficulty: "Средне", shortDesc: "Толстая пшеничная лапша с говядиной в соусе.", ingredients: ["лапша удон","говядина 300г","лук","чеснок","соевый соус","сахар","кунжут"], steps: ["Обжарьте говядину с луком.","Добавьте соевый соус и сахар.","Отварите лапшу, смешайте с мясом.","Посыпьте кунжутом."] },
+    { id: 24, title: "Спринг-роллы", category: "asian", img: "Спринг-роллы.jpg", time: "25 мин", difficulty: "Легко", shortDesc: "Хрустящие роллы с овощами и креветками.", ingredients: ["рисовые листы","креветки","салат","морковь","огурец","мята"], steps: ["Замочите рисовые листы в воде.","Выложите начинку, сверните.","Подавайте с арахисовым соусом."] },
+    // Европа
+    { id: 10, title: "Крем-суп из тыквы", category: "european", img: "Крем-суп из тыквы.jpg", time: "35 мин", difficulty: "Легко", shortDesc: "Нежный французский суп.", ingredients: ["тыква 700г","лук","чеснок","бульон","сливки","имбирь"], steps: ["Обжарьте лук и чеснок.","Добавьте тыкву и бульон, варите до мягкости.","Пюрируйте, добавьте сливки."] },
+    { id: 11, title: "Греческий салат", category: "european", img: "Греческий салат.jpg", time: "15 мин", difficulty: "Легко", shortDesc: "Сочный салат с фетой и оливками.", ingredients: ["помидоры","огурцы","перец","фета","оливки","оливковое масло","орегано"], steps: ["Нарежьте овощи.","Добавьте кубики феты и оливки.","Заправьте маслом и орегано."] },
+    { id: 12, title: "Говядина по-бургундски", category: "european", img: "Говядина по-бургундски.jpg", time: "2.5 часа", difficulty: "Сложно", shortDesc: "Классика французской кухни.", ingredients: ["говядина 800г","красное вино","лук","морковь","бекон","грибы"], steps: ["Замаринуйте мясо в вине.","Тушите с овощами 2 часа.","Добавьте грибы в конце."] },
+    { id: 13, title: "Шоколадный фондан", category: "european", img: "Шоколадный фондан.jpg", time: "25 мин", difficulty: "Средне", shortDesc: "Десерт с жидкой сердцевиной.", ingredients: ["шоколад 150г","масло 100г","яйца 2шт","сахар 50г","мука 40г"], steps: ["Растопите шоколад с маслом.","Взбейте яйца с сахаром, добавьте муку.","Смешайте, выпекайте 10 мин при 200°C."] },
+    { id: 14, title: "Рататуй", category: "european", img: "Рататуй.jpg", time: "30 мин", difficulty: "Легко", shortDesc: "Провансальское овощное рагу.", ingredients: ["баклажан","цуккини","перец","томаты","чеснок","тимьян"], steps: ["Нарежьте все овощи.","Тушите с чесноком и тимьяном 20 мин."] },
+    { id: 25, title: "Киш Лорен", category: "european", img: "Киш Лорен.jpeg", time: "1 час", difficulty: "Средне", shortDesc: "Французский открытый пирог с беконом и сыром.", ingredients: ["мука","масло","яйца","сливки","бекон","сыр грюйер"], steps: ["Замесите тесто, выложите в форму.","Обжарьте бекон.","Смешайте яйца со сливками и сыром.","Вылейте начинку, запеките 30 мин."] },
+    { id: 26, title: "Фондю", category: "european", img: "Фондю.jpg", time: "30 мин", difficulty: "Средне", shortDesc: "Швейцарское фондю из сыра.", ingredients: ["сыр грюйер 300г","сыр эмменталь 300г","белое вино","чеснок","кирш"], steps: ["Натрите сыр.","Разогрейте вино с чесноком.","Постепенно добавляйте сыр, мешайте до однородности.","Добавьте кирш."] },
+    // Мексика
+    { id: 27, title: "Такос", category: "mexican", img: "Такос.jpg", time: "30 мин", difficulty: "Средне", shortDesc: "Мексиканские тортильи с начинкой.", ingredients: ["тортильи","говяжий фарш","лук","перец","сыр","сальса"], steps: ["Обжарьте фарш с луком и перцем.","Разогрейте тортильи.","Выложите начинку, посыпьте сыром, добавьте сальсу."] },
+    { id: 28, title: "Гуакамоле", category: "mexican", img: "Гуакамоле.jpg", time: "15 мин", difficulty: "Легко", shortDesc: "Мексиканский соус из авокадо.", ingredients: ["авокадо 2 шт","лук","томат","чили","лайм","кинза"], steps: ["Разомните авокадо.","Добавьте мелко нарезанные овощи и лайм.","Посолите, перемешайте."] },
+    { id: 29, title: "Буррито", category: "mexican", img: "Буррито.jpeg", time: "30 мин", difficulty: "Средне", shortDesc: "Большая тортилья с начинкой из фасоли и мяса.", ingredients: ["тортилья большая","фасоль","рис","курица","перец","сыр","сметана"], steps: ["Обжарьте курицу с перцем.","Нагрейте тортилью.","Выложите начинку, добавьте фасоль, рис, сыр.","Заверните и обжарьте."] },
+    { id: 30, title: "Чилакилес", category: "mexican", img: "Чилакилес.jpeg", time: "25 мин", difficulty: "Легко", shortDesc: "Тортилья с яйцом и сальсой.", ingredients: ["тортилья","яйца","томатный соус","сыр","перец чили"], steps: ["Обжарьте кусочки тортильи.","Залейте яйцами и соусом.","Посыпьте сыром."] },
+    // Восток
+    { id: 31, title: "Хумус", category: "middle_east", img: "Хумус.jpg", time: "15 мин", difficulty: "Легко", shortDesc: "Паста из нута с тахини и лимоном.", ingredients: ["нут варёный","тахини","чеснок","лимон","оливковое масло"], steps: ["Смешайте нут, тахини, чеснок, лимон в блендере.","Добавьте масло и воду до нужной консистенции."] },
+    { id: 32, title: "Фалафель", category: "middle_east", img: "Фалафель.jpg", time: "40 мин", difficulty: "Средне", shortDesc: "Жареные шарики из нута с пряностями.", ingredients: ["нут сухой","лук","чеснок","кинза","тмин","кориандр"], steps: ["Замочите нут на ночь.","Измельчите с луком и специями.","Сформируйте шарики, обжарьте."] },
+    { id: 33, title: "Плов", category: "middle_east", img: "Плов.jpeg", time: "1 час", difficulty: "Средне", shortDesc: "Ароматный узбекский плов с бараниной.", ingredients: ["баранина 500г","рис","морковь","лук","кумин","барбарис"], steps: ["Обжарьте мясо с луком.","Добавьте морковь и специи.","Засыпьте рис, залейте водой, варите до готовности."] },
+    { id: 34, title: "Тахин", category: "middle_east", img: "Тахин.jpg", time: "10 мин", difficulty: "Легко", shortDesc: "Кунжутная паста для соусов.", ingredients: ["семена кунжута","оливковое масло"], steps: ["Обжарьте кунжут.","Измельчите в блендере с маслом."] },
+    { id: 35, title: "Кус-кус с овощами", category: "middle_east", img: "Кус-кус с овощами.jpg", time: "20 мин", difficulty: "Легко", shortDesc: "Магрибский гарнир из кус-куса.", ingredients: ["кус-кус 200г","овощи (цуккини, морковь)","лук","специи"], steps: ["Залейте кус-кус кипятком, дайте настояться.","Обжарьте овощи, смешайте с кус-кусом."] },
+    // Дополнительные
+    { id: 36, title: "Куриный суп с лапшой", category: "european", img: "Куриный суп с лапшой.jpeg", time: "40 мин", difficulty: "Легко", shortDesc: "Домашний куриный суп с овощами.", ingredients: ["курица","лапша","морковь","лук","зелень"], steps: ["Сварите бульон.","Добавьте овощи, лапшу.","Варите до готовности."] },
+    { id: 37, title: "Салат Цезарь", category: "european", img: "Салат Цезарь.jpeg", time: "20 мин", difficulty: "Средне", shortDesc: "Классический салат с курицей и пармезаном.", ingredients: ["курица","салат романо","сухарики","пармезан","соус цезарь"], steps: ["Обжарьте курицу.","Нарежьте салат, добавьте сухарики.","Заправьте соусом, посыпьте сыром."] },
+    { id: 38, title: "Жульен с грибами", category: "russian", img: "Жульен с грибами.jpg", time: "40 мин", difficulty: "Средне", shortDesc: "Горячая закуска из грибов в соусе.", ingredients: ["шампиньоны","лук","сливки","сыр","мука"], steps: ["Обжарьте грибы с луком.","Добавьте муку, сливки, тушите.","Посыпьте сыром и запеките."] },
+    { id: 39, title: "Курица Терияки", category: "asian", img: "Курица Терияки.jpg", time: "30 мин", difficulty: "Средне", shortDesc: "Курица в сладком соусе терияки.", ingredients: ["куриное филе","соус терияки","чеснок","имбирь","кунжут"], steps: ["Обжарьте курицу.","Добавьте соус, чеснок, имбирь.","Тушите 10 мин, посыпьте кунжутом."] },
+    { id: 40, title: "Папая с креветками", category: "asian", img: "Папая с креветками.jpg", time: "20 мин", difficulty: "Легко", shortDesc: "Салат из папайи с креветками и орехами.", ingredients: ["папайя","креветки","арахис","чили","рыбный соус"], steps: ["Нарежьте папайю.","Обжарьте креветки.","Смешайте с орехами и соусом."] },
+    { id: 41, title: "Мексиканский суп Тортилья", category: "mexican", img: "Мексиканский суп Тортилья.jpg", time: "30 мин", difficulty: "Средне", shortDesc: "Острый суп с курицей и тортильей.", ingredients: ["курица","томатный бульон","чили","тортилья","авокадо"], steps: ["Сварите бульон с томатами.","Добавьте курицу и чили.","Подавайте с кусочками тортильи и авокадо."] },
+    { id: 42, title: "Баклажаны по-грузински", category: "middle_east", img: "Баклажаны по-грузински.jpg", time: "30 мин", difficulty: "Легко", shortDesc: "Баклажаны с ореховой пастой и гранатом.", ingredients: ["баклажаны","грецкие орехи","чеснок","гранат","специи"], steps: ["Запеките баклажаны.","Измельчите орехи с чесноком и специями.","Нафаршируйте баклажаны пастой, украсьте зернами граната."] },
+    { id: 43, title: "Итальянский десерт Панна-котта", category: "italian", img: "Итальянский десерт Панна-котта.jpg", time: "20 мин + охлаждение", difficulty: "Средне", shortDesc: "Нежный сливочный десерт с ягодами.", ingredients: ["сливки 500мл","сахар","желатин","ваниль","ягоды"], steps: ["Замочите желатин.","Нагрейте сливки с сахаром.","Добавьте желатин, разлейте по формам.","Охладите 4 часа.","Подавайте с ягодами."] },
+    { id: 44, title: "Русский квас", category: "russian", img: "Русский квас.jpg", time: "2 дня", difficulty: "Сложно", shortDesc: "Настоящий домашний квас.", ingredients: ["ржаной хлеб","сахар","дрожжи","изюм"], steps: ["Подсушите хлеб.","Залейте кипятком, добавьте сахар.","Остудите, добавьте дрожжи.","Оставьте бродить на сутки, разлейте по бутылкам с изюмом."] }
+  ];
+
+  // ----- ЛАЙКИ (localStorage) -----
+  function getLikes() {
+    const stored = localStorage.getItem('recipeLikes');
+    return stored ? JSON.parse(stored) : {};
+  }
+  function saveLikes(likes) {
+    localStorage.setItem('recipeLikes', JSON.stringify(likes));
+  }
+  function toggleLike(recipeId) {
+    const likes = getLikes();
+    if (likes[recipeId]) delete likes[recipeId];
+    else likes[recipeId] = true;
+    saveLikes(likes);
+    return likes;
+  }
+  function isLiked(recipeId) {
+    const likes = getLikes();
+    return !!likes[recipeId];
+  }
+  function getLikeCount(recipeId) {
+    const likes = getLikes();
+    return Object.keys(likes).filter(id => parseInt(id) === recipeId).length;
+  }
+
+  // ----- ОСНОВНАЯ ФУНКЦИЯ РЕНДЕРИНГА -----
+  function renderRecipes(containerId, filterCategory = "all", searchQuery = "", sortBy = "title_asc", extraFilters = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+
+    let filtered = recipesData;
+    if (filterCategory !== "all") {
+      filtered = filtered.filter(r => r.category === filterCategory);
+    }
+    if (extraFilters.difficulty && extraFilters.difficulty !== 'all') {
+      filtered = filtered.filter(r => r.difficulty === extraFilters.difficulty);
+    }
+    if (extraFilters.time && extraFilters.time !== 'all') {
+      filtered = filtered.filter(r => {
+        const minutes = normalizeTime(r.time);
+        if (extraFilters.time === 'fast') return minutes <= 30;
+        if (extraFilters.time === 'medium') return minutes > 30 && minutes <= 60;
+        if (extraFilters.time === 'long') return minutes > 60;
+        return true;
+      });
+    }
+    if (searchQuery.trim() !== "") {
+      const q = searchQuery.trim().toLowerCase();
+      filtered = filtered.filter(r =>
+        r.title.toLowerCase().includes(q) ||
+        r.ingredients.some(ing => ing.toLowerCase().includes(q))
+      );
+    }
+    switch (sortBy) {
+      case "title_asc":
+        filtered.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+      case "time_asc":
+        filtered.sort((a, b) => normalizeTime(a.time) - normalizeTime(b.time));
+        break;
+      case "difficulty_asc":
+        const diffRank = { "Легко": 1, "Средне": 2, "Сложно": 3 };
+        filtered.sort((a, b) => diffRank[a.difficulty] - diffRank[b.difficulty]);
+        break;
+      default:
+        break;
+    }
+
+    container.innerHTML = '';
+    if (filtered.length === 0) {
+      container.innerHTML = `<p style="text-align:center; padding:2rem; color:var(--text); opacity:0.6;">Рецептов не найдено.</p>`;
+      return;
+    }
+
+    filtered.forEach(recipe => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      const liked = isLiked(recipe.id);
+      const count = getLikeCount(recipe.id);
+      card.innerHTML = `
+        <img class="recipe-img" src="${recipe.img}" alt="${recipe.title}" loading="lazy">
+        <div class="recipe-info">
+          <h3 class="recipe-title">${recipe.title}</h3>
+          <div class="recipe-meta"><span>${recipe.time}</span><span>${recipe.difficulty}</span></div>
+          <div class="recipe-desc">${recipe.shortDesc}</div>
+          <div class="recipe-actions">
+            <button class="btn recipe-detail-btn" data-id="${recipe.id}">Подробнее</button>
+            <button class="like-btn ${liked ? 'liked' : ''}" data-id="${recipe.id}">
+              ❤️ <span class="like-count">${count}</span>
+            </button>
+          </div>
+        </div>
+      `;
+      container.appendChild(card);
+    });
+
+    document.querySelectorAll(`#${containerId} .recipe-detail-btn`).forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = parseInt(btn.getAttribute('data-id'));
+        const recipe = recipesData.find(r => r.id === id);
+        if (recipe) openModal(recipe);
+      });
+    });
+
+    document.querySelectorAll(`#${containerId} .like-btn`).forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-id'));
+        toggleLike(id);
+        updateLikeUI(id, btn);
+        const modalLikeBtn = document.getElementById('modalLikeBtn');
+        if (modalLikeBtn && parseInt(modalLikeBtn.getAttribute('data-id')) === id) {
+          updateModalLikeUI(id);
+        }
+      });
+    });
+  }
+
+  function updateLikeUI(recipeId, btnElement) {
+    const liked = isLiked(recipeId);
+    const count = getLikeCount(recipeId);
+    if (btnElement) {
+      btnElement.classList.toggle('liked', liked);
+      const span = btnElement.querySelector('.like-count');
+      if (span) span.textContent = count;
+    }
+    document.querySelectorAll(`.like-btn[data-id="${recipeId}"]`).forEach(el => {
+      if (el !== btnElement) {
+        el.classList.toggle('liked', liked);
+        const span = el.querySelector('.like-count');
+        if (span) span.textContent = count;
+      }
+    });
+  }
+
+  function updateModalLikeUI(recipeId) {
+    const liked = isLiked(recipeId);
+    const count = getLikeCount(recipeId);
+    const modalBtn = document.getElementById('modalLikeBtn');
+    if (modalBtn) {
+      modalBtn.classList.toggle('liked', liked);
+      const span = document.getElementById('modalLikeCount');
+      if (span) span.textContent = count;
+      modalBtn.setAttribute('data-id', recipeId);
+    }
+  }
+
+  // ----- МОДАЛЬНОЕ ОКНО -----
+  const modal = document.getElementById('recipeModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalBody = document.getElementById('modalBody');
+  let currentModalRecipeId = null;
+
+  function openModal(recipe) {
+    currentModalRecipeId = recipe.id;
+    modalTitle.textContent = recipe.title;
+    const liked = isLiked(recipe.id);
+    const count = getLikeCount(recipe.id);
+    let html = `<img src="${recipe.img}" style="width:100%; border-radius:24px; margin-bottom:1rem; max-height:220px; object-fit:cover;">
+      <p><strong>Время:</strong> ${recipe.time} &nbsp;|&nbsp; <strong>Сложность:</strong> ${recipe.difficulty}</p>
+      <h4>Ингредиенты:</h4><ul>${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}</ul>
+      <h4>Приготовление:</h4><ol>${recipe.steps.map(s => `<li>${s}</li>`).join('')}</ol>
+      <p style="margin-top:1rem; font-style:italic;">Приятного аппетита!</p>`;
+    modalBody.innerHTML = html;
+    const modalLikeBtn = document.getElementById('modalLikeBtn');
+    modalLikeBtn.setAttribute('data-id', recipe.id);
+    modalLikeBtn.classList.toggle('liked', liked);
+    document.getElementById('modalLikeCount').textContent = count;
+    modal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+
+  // ----- ОБРАБОТЧИКИ -----
+  document.getElementById('modalLikeBtn').addEventListener('click', function() {
+    const id = parseInt(this.getAttribute('data-id'));
+    if (!id) return;
+    toggleLike(id);
+    updateModalLikeUI(id);
+    document.querySelectorAll(`.like-btn[data-id="${id}"]`).forEach(el => {
+      updateLikeUI(id, el);
+    });
+  });
+
+  // ----- НАВИГАЦИЯ -----
+  const pages = {
+    home: document.getElementById('homePage'),
+    recipes: document.getElementById('recipesPage'),
+    about: document.getElementById('aboutPage'),
+    contacts: document.getElementById('contactsPage')
+  };
+
+  function setActivePage(pageId) {
+    Object.values(pages).forEach(p => p?.classList.remove('active-page'));
+    if (pages[pageId]) pages[pageId].classList.add('active-page');
+    document.querySelectorAll('.nav-links a').forEach(link => {
+      if (link.getAttribute('data-page') === pageId) link.classList.add('active');
+      else link.classList.remove('active');
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (pageId === 'recipes') {
+      document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active-filter'));
+      const allCat = document.querySelector('.filter-btn[data-category="all"]');
+      if (allCat) allCat.classList.add('active-filter');
+      document.querySelectorAll('.extra-filter').forEach(b => b.classList.remove('active-filter'));
+      document.querySelectorAll('.extra-filter[data-value="all"]').forEach(b => b.classList.add('active-filter'));
+      document.getElementById('searchInput').value = '';
+      document.getElementById('sortSelect').value = 'title_asc';
+      renderRecipes('allRecipesGrid', 'all', '', 'title_asc', { difficulty: 'all', time: 'all' });
+    }
+  }
+
+  // ----- ФИЛЬТРЫ -----
+  function initFilters() {
+    const filterContainer = document.getElementById('filterButtons');
+    if (filterContainer) {
+      filterContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.filter-btn');
+        if (!btn || btn.classList.contains('extra-filter')) return;
+        const category = btn.getAttribute('data-category');
+        document.querySelectorAll('.filter-btn[data-category]').forEach(b => b.classList.remove('active-filter'));
+        btn.classList.add('active-filter');
+        applyAllFilters();
+      });
+    }
+    const extraContainer = document.getElementById('extraFilters');
+    if (extraContainer) {
+      extraContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.extra-filter');
+        if (!btn) return;
+        const type = btn.getAttribute('data-type');
+        const value = btn.getAttribute('data-value');
+        document.querySelectorAll(`.extra-filter[data-type="${type}"]`).forEach(b => b.classList.remove('active-filter'));
+        btn.classList.add('active-filter');
+        applyAllFilters();
+      });
+    }
+  }
+
+  function applyAllFilters() {
+    const categoryBtn = document.querySelector('.filter-btn[data-category].active-filter');
+    const category = categoryBtn ? categoryBtn.getAttribute('data-category') : 'all';
+    const search = document.getElementById('searchInput').value;
+    const sort = document.getElementById('sortSelect').value;
+    const diffBtn = document.querySelector('.extra-filter[data-type="difficulty"].active-filter');
+    const diff = diffBtn ? diffBtn.getAttribute('data-value') : 'all';
+    const timeBtn = document.querySelector('.extra-filter[data-type="time"].active-filter');
+    const time = timeBtn ? timeBtn.getAttribute('data-value') : 'all';
+    renderRecipes('allRecipesGrid', category, search, sort, { difficulty: diff, time: time });
+  }
+
+  function initSearchSort() {
+    document.getElementById('searchInput').addEventListener('input', applyAllFilters);
+    document.getElementById('sortSelect').addEventListener('change', applyAllFilters);
+  }
+
+  // ----- СЛУЧАЙНЫЙ РЕЦЕПТ -----
+  document.getElementById('randomRecipeBtn').addEventListener('click', function() {
+    const randomIndex = Math.floor(Math.random() * recipesData.length);
+    const recipe = recipesData[randomIndex];
+    if (recipe) openModal(recipe);
+  });
+
+  // ----- ТЕМА И ШРИФТ -----
+  function initTheme() {
+    const themeToggle = document.getElementById('themeToggle');
+    const storedTheme = localStorage.getItem('theme');
+    if (storedTheme === 'dark') {
+      document.body.classList.add('dark');
+      themeToggle.textContent = '☀️';
+    }
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      const isDark = document.body.classList.contains('dark');
+      themeToggle.textContent = isDark ? '☀️' : '🌙';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+    });
+  }
+
+  function initFont() {
+    const fontToggle = document.getElementById('fontToggle');
+    const storedFont = localStorage.getItem('fontSize') || 'medium';
+    if (storedFont === 'small') document.body.classList.add('small-font');
+    if (storedFont === 'large') document.body.classList.add('large-font');
+    fontToggle.addEventListener('click', () => {
+      if (document.body.classList.contains('small-font')) {
+        document.body.classList.remove('small-font');
+        document.body.classList.add('large-font');
+        localStorage.setItem('fontSize', 'large');
+      } else if (document.body.classList.contains('large-font')) {
+        document.body.classList.remove('large-font');
+        localStorage.setItem('fontSize', 'medium');
+      } else {
+        document.body.classList.add('small-font');
+        localStorage.setItem('fontSize', 'small');
+      }
+    });
+  }
+
+  // ----- БУРГЕР, ФОРМА -----
+  document.getElementById('menuToggle')?.addEventListener('click', () => {
+    document.getElementById('navLinks').classList.toggle('show');
+  });
+
+  document.querySelectorAll('.nav-links a, [data-page]').forEach(el => {
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      const page = el.getAttribute('data-page');
+      if (page && pages[page]) setActivePage(page);
+      document.getElementById('navLinks')?.classList.remove('show');
+    });
+  });
+
+  document.getElementById('closeModalBtn')?.addEventListener('click', closeModal);
+  window.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
+
+  document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    alert('Спасибо за сообщение, Иван свяжется с вами!');
+    e.target.reset();
+  });
+
+  // ----- ИНИЦИАЛИЗАЦИЯ -----
+  // Главная
+  const homeGrid = document.getElementById('homeRecipesGrid');
+  if (homeGrid) {
+    const limited = recipesData.slice(0, 4);
+    homeGrid.innerHTML = '';
+    limited.forEach(recipe => {
+      const card = document.createElement('div');
+      card.className = 'recipe-card';
+      const liked = isLiked(recipe.id);
+      const count = getLikeCount(recipe.id);
+      card.innerHTML = `
+        <img class="recipe-img" src="${recipe.img}" alt="${recipe.title}">
+        <div class="recipe-info">
+          <h3 class="recipe-title">${recipe.title}</h3>
+          <div class="recipe-meta"><span>${recipe.time}</span><span>${recipe.difficulty}</span></div>
+          <div class="recipe-desc">${recipe.shortDesc}</div>
+          <div class="recipe-actions">
+            <button class="btn recipe-detail-btn" data-id="${recipe.id}">Подробнее</button>
+            <button class="like-btn ${liked ? 'liked' : ''}" data-id="${recipe.id}">
+              ❤️ <span class="like-count">${count}</span>
+            </button>
+          </div>
+        </div>
+      `;
+      homeGrid.appendChild(card);
+    });
+    document.querySelectorAll('#homeRecipesGrid .recipe-detail-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const id = parseInt(btn.getAttribute('data-id'));
+        const recipe = recipesData.find(r => r.id === id);
+        if (recipe) openModal(recipe);
+      });
+    });
+    document.querySelectorAll('#homeRecipesGrid .like-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = parseInt(btn.getAttribute('data-id'));
+        toggleLike(id);
+        updateLikeUI(id, btn);
+      });
+    });
+  }
+
+  // Страница рецептов
+  renderRecipes('allRecipesGrid', 'all', '', 'title_asc', { difficulty: 'all', time: 'all' });
+  initFilters();
+  initSearchSort();
+  initTheme();
+  initFont();
+  setActivePage('home');
+</script>
+</body>
+</html>
